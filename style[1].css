@@ -1,0 +1,50 @@
+body {
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+#game-container {
+    text-align: center;
+}
+
+#click-button {
+    padding: 15px 30px;
+    font-size: 20px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    /* Add a hover effect */
+    transition: transform 0.1s; 
+}
+
+#click-button:hover {
+    transform: scale(1.05);
+}
+
+#click-button:active {
+    transform: scale(0.95);
+}
+
+.reset-btn {
+    margin-top: 15px;
+    background: #34495e; /* Subtle gray-blue */
+    color: white;
+    border: none;
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 0.8rem;
+    transition: background 0.2s;
+}
+
+.reset-btn:hover {
+    background: #e94560; /* Turns red when you hover */
+}

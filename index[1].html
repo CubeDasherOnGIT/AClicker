@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AClicker By Cube-DasherGD</title>
+    <style>
+        body { background: #1a1a2e; color: white; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .game-card { background: #16213e; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; width: 300px; }
+        
+        h1 { font-size: 3rem; margin: 10px 0; color: #4ecca3; }
+        .label { color: #95a5a6; text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; }
+
+        #main-btn { 
+            width: 120px; height: 120px; border-radius: 50%; border: none; 
+            background: #4ecca3; color: #1a1a2e; font-weight: bold; font-size: 1.2rem;
+            cursor: pointer; margin: 20px 0; transition: transform 0.1s; 
+            box-shadow: 0 0 20px rgba(78, 204, 163, 0.3);
+        }
+        #main-btn:active { transform: scale(0.9); }
+
+        .shop { margin-top: 20px; border-top: 1px solid #0f3460; padding-top: 20px; }
+        
+        button.upgrade {
+            background: #e94560; color: white; border: none; padding: 12px;
+            width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer;
+            margin-bottom: 10px; transition: 0.2s;
+        }
+        button.upgrade:disabled { background: #444; opacity: 0.5; cursor: not-allowed; }
+
+        .reset-btn {
+            background: transparent; color: #555; border: 1px solid #333;
+            padding: 8px; width: 100%; border-radius: 5px; cursor: pointer; font-size: 0.7rem;
+        }
+        .reset-btn:hover { color: #ff5e78; border-color: #ff5e78; }
+    </style>
+</head>
+<body>
+
+    <div class="game-card">
+        <div class="label">Total Score</div>
+        <h1 id="score">0</h1>
+        
+        <button id="main-btn">CLICK!</button>
+
+        <div class="shop">
+            <p class="label">Power: +<span id="power-val">1</span></p>
+            <button id="upgrade-btn" class="upgrade">
+                UPGRADE (x2) <br>
+                Cost: <span id="cost-val">10</span>
+            </button>
+            
+            <button id="reset-btn" class="reset-btn">RESET PROGRESS</button>
+        </div>
+    </div>
+
+    <script>
+        // 1. DATA VARIABLES
+        let score = 0;
+        let clickPower = 1;
+        let upgradeCost = 50;
+
+        // 2. ELEMENT SELECTORS
+        const scoreEl = document.getElementById('score');
+        const powerEl = document.getElementById('power-val');
+        const costEl = document.getElementById('cost-val');
+        const upgradeBtn = document.getElementById('upgrade-btn');
+        const mainBtn = document.getElementById('main-btn');
+        const resetBtn = document.getElementById('reset-btn');
+
+        // 3. CORE FUNCTIONS
+        function updateUI() {
+            scoreEl.innerText = Math.floor(score);
+            powerEl.innerText = clickPower;
+            costEl.innerText = upgradeCost;
+            upgradeBtn.disabled = score < upgradeCost;
+        }
+
+        function save() {
+            const data = { score, clickPower, upgradeCost };
+            localStorage.setItem("clickerData", JSON.stringify(data));
+        }
+
+        // 4. CLICK LOGIC
+        mainBtn.addEventListener('click', () => {
+            score += clickPower;
+            updateUI();
+            save();
+        });
+
+        // 5. UPGRADE LOGIC
+        upgradeBtn.addEventListener('click', () => {
+            if (score >= upgradeCost) {
+                score -= upgradeCost;
+                clickPower *= 2;
+                upgradeCost = Math.floor(upgradeCost * 3); // Increase price
+                updateUI();
+                save();
+            }
+        });
+
+        // 6. RESET LOGIC
+        resetBtn.addEventListener('click', () => {
+            if (confirm("Are you sure? Everything will be lost!")) {
+                localStorage.removeItem("clickerData");
+                score = 0;
+                clickPower = 1;
+                upgradeCost = 50;
+                updateUI();
+            }
+        });
+
+        // 7. INITIAL LOAD
+        const saved = JSON.parse(localStorage.getItem("clickerData"));
+        if (saved) {
+            score = saved.score;
+            clickPower = saved.clickPower;
+            upgradeCost = saved.upgradeCost;
+        }
+        updateUI();
+    </script>
+</body>
+</html>
